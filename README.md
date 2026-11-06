@@ -19,6 +19,10 @@ A cartoony 3D parkour survival game for phones and computers. A zombie horde cha
 | Zipline | 🪂 button (appears near one) | E |
 
 ## Gameplay
+- **Choose from 5 runners**: Max (fast), Nina (7 hearts), Jay (starts with a pistol), Pip (traps stun 2x longer), Kai (jumps & climbs higher)
+- **Wall run**: jump at a wall and keep pushing to run up or along it; jump again to wall-jump
+- **Cat & mouse traps** are hidden around the city. Lure zombies into 🍌 banana peels, 🔨 falling anvils and 🌀 springs
+- Arrow shows you through buildings; ⚠ markers show zombies hidden behind walls
 - **Survive 2 minutes**, then a rescue 🚁 helicopter lands somewhere on the map. Reach it within 60 seconds to escape (+1000 points). Miss it and it comes back later.
 - Zombie **health bars** and a **minimap** (tap it to enlarge, or press M)
 - Start with a **knife** (1 damage). Stand by a chest to open it:
