@@ -2,6 +2,10 @@
 
 A cartoony 3D parkour survival game for phones and computers. A zombie horde chases you through a city: climb rooftops, slide under grabs, ride ziplines, and open chests for guns. Zombies melt into goo (no blood).
 
+## Download
+- 📱 **Android app (APK):** https://github.com/syedsaqibimam/goo-rush/releases/latest/download/goo-rush.apk (open it and allow "Install unknown apps")
+- 🍏 **iPhone:** use the web install below (Apple doesn't allow installing app files from outside the App Store)
+
 ## Play / install on your phone
 1. Open the GitHub Pages link for this repo on your phone (Settings → Pages shows it, e.g. `https://<username>.github.io/goo-rush/`).
 2. Install it:

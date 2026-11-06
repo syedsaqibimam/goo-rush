@@ -1,0 +1,70 @@
+name: Build Android APK
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: android-apk
+  cancel-in-progress: true
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Create Capacitor Android project
+        run: |
+          mkdir -p app/www
+          cp -r index.html three.min.js manifest.webmanifest icons app/www/
+          cd app
+          npm init -y >/dev/null
+          npm install --no-audit --no-fund @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6
+          npx cap init "Goo Rush" com.nexplay.goorush --web-dir www
+          npx cap add android
+          npx cap sync android
+      - name: Configure app (landscape, fullscreen, icon, version)
+        run: |
+          python3 - <<'PY'
+          import re, shutil, os, glob
+          base='app/android/app/src/main'
+          m=open(base+'/AndroidManifest.xml').read()
+          m=m.replace('<activity','<activity android:screenOrientation="sensorLandscape"',1)
+          open(base+'/AndroidManifest.xml','w').write(m)
+          st=base+'/res/values/styles.xml'; s=open(st).read()
+          s=re.sub(r'(<style name="AppTheme.NoActionBar"[^>]*>)', r'\1\n        <item name="android:windowFullscreen">true</item>', s)
+          open(st,'w').write(s)
+          shutil.rmtree(base+'/res/mipmap-anydpi-v26', ignore_errors=True)
+          for d in ['mdpi','hdpi','xhdpi','xxhdpi','xxxhdpi']:
+              for f in glob.glob(f'{base}/res/mipmap-{d}/ic_launcher*.png'): os.remove(f)
+              for n in ['ic_launcher.png','ic_launcher_round.png','ic_launcher_foreground.png']:
+                  shutil.copy(f'android-icons/ic_launcher-{d}.png', f'{base}/res/mipmap-{d}/{n}')
+          g='app/android/app/build.gradle'; s=open(g).read()
+          run=os.environ.get('GITHUB_RUN_NUMBER','1')
+          s=re.sub(r'versionCode \d+', f'versionCode {run}', s)
+          s=re.sub(r'versionName "[^"]*"', f'versionName "1.{run}"', s)
+          open(g,'w').write(s)
+          PY
+      - name: Build APK
+        run: |
+          cd app/android
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon -q
+          cp app/build/outputs/apk/debug/app-debug.apk $GITHUB_WORKSPACE/goo-rush.apk
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.${{ github.run_number }}
+          name: Goo Rush v1.${{ github.run_number }}
+          make_latest: true
+          body: |
+            📱 **Android:** download `goo-rush.apk` below, open it, and allow "Install unknown apps" if asked.
+            🍏 **iPhone:** open https://syedsaqibimam.github.io/goo-rush/ in Safari → Share → Add to Home Screen.
+          files: goo-rush.apk

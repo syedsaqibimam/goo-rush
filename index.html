@@ -128,6 +128,7 @@ h1{font-size:64px;line-height:.95;color:#9dff5c;text-shadow:0 5px 0 #2d7a12,0 9p
   <div class="chars" id="chars"></div>
   <button class="play" id="play">PLAY</button>
   <div class="best" id="bestMenu"></div>
+  <a id="apkLink" href="https://github.com/syedsaqibimam/goo-rush/releases/latest/download/goo-rush.apk" style="display:none;margin-top:10px;color:#9dff5c;font-size:16px">📲 Download the Android app</a>
 </div></div>
 
 <div id="over" class="ov hide"><div class="card">
@@ -1135,6 +1136,7 @@ function hex(c){return '#'+c.toString(16).padStart(6,'0')}
 function renderChars(){$('chars').innerHTML=CHARS.map(c=>`<div class="char${c===CH?' sel':''}" data-id="${c.id}"><div class="face">${c.face}</div><div class="nm">${c.name}</div><div class="sw"><i style="background:${hex(c.hood)}"></i><i style="background:${hex(c.pants)}"></i><i style="background:${hex(c.cap)}"></i></div><div class="perk">${c.perk}</div></div>`).join('');
   for(const el of $('chars').children)el.addEventListener('click',()=>{CH=CHARS.find(c=>c.id===el.dataset.id);store.set('gooRushChar',CH.id);applyChar();renderChars();initAudio();tone(520,780,.08,'triangle',.12)})}
 renderChars();applyChar();
+if(/Android/i.test(navigator.userAgent)&&!window.Capacitor&&location.protocol==='https:')$('apkLink').style.display='inline-block';
 {const b=+(store.get('gooRushBest')||0);if(b)$('bestMenu').textContent='Best score: '+b}
 
 // menu preview
