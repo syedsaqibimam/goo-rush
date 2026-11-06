@@ -19,6 +19,8 @@ A cartoony 3D parkour survival game for phones and computers. A zombie horde cha
 | Zipline | 🪂 button (appears near one) | E |
 
 ## Gameplay
+- **Survive 2 minutes**, then a rescue 🚁 helicopter lands somewhere on the map. Reach it within 60 seconds to escape (+1000 points). Miss it and it comes back later.
+- Zombie **health bars** and a **minimap** (tap it to enlarge, or press M)
 - Start with a **knife** (1 damage). Stand by a chest to open it:
   - 🟫 Brown → **Pistol** (common)
   - 🟦 Blue → **Minigun** (uncommon)
