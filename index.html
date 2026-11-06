@@ -434,7 +434,7 @@ const WEAPONS={
   knife:{name:'Knife',icon:'🔪',dmg:1,rate:.36,range:2.5,melee:true,rar:0},
   pistol:{name:'Pistol',icon:'🔫',dmg:2,rate:.3,range:22,speed:46,size:.13,color:0xffe14d,ammo:16,rar:1,spread:.02},
   minigun:{name:'Minigun',icon:'⚙️',dmg:1,rate:.065,range:20,speed:52,size:.1,color:0xff9a3c,ammo:90,rar:2,spread:.09,slow:.55,spin:.35},
-  alien:{name:'Alien Blaster',icon:'👽',dmg:8,rate:.55,range:26,speed:30,size:.34,color:0x8bff5a,ammo:8,rar:3,pierce:true,spread:0}
+  alien:{name:'Alien Blaster',icon:'👽',dmg:8,rate:.55,range:26,speed:30,size:.34,color:0x8bff5a,ammo:60,rar:3,pierce:true,spread:0}
 };
 const CHEST_KINDS={
   brown:{weapon:'pistol',color:0x9c6a3a,trim:0x5e3c1d,label:'🟫'},
@@ -1075,11 +1075,11 @@ function spawnLogic(dt){
     spawnT=interval;
     const r=Math.random();
     const fastC=gameTime>12?Math.min(.32,.14+(gameTime-12)/250):0;
-    const strongC=gameTime>35?Math.min(.16,.05+(gameTime-35)/600):0;
+    const strongC=gameTime>15?Math.min(.3,.12+(gameTime-15)/400):0;
     spawnZombie(r<strongC?'strong':r<strongC+fastC?'fast':'normal');
   }
   if(gameTime>12&&!announced.fast){announced.fast=1;toast('🔵 Fast zombies incoming!')}
-  if(gameTime>=nextStrong){nextStrong+=30;spawnZombie('strong',true);if(!announced.strong){announced.strong=1;toast('🟠 Strong zombie! It climbs walls!')}}
+  if(gameTime>=nextStrong){nextStrong+=12;spawnZombie('strong',true);if(!announced.strong){announced.strong=1;toast('🟠 Strong zombie! It climbs walls!')}}
   groanT-=dt;if(groanT<=0){groanT=rand(1.5,4);if(zombies.length)sfx.groan()}
 }
 
@@ -1109,7 +1109,7 @@ function resetGame(){
   for(const c of chests)scene.remove(c.g);chests.length=0;respawnTimers=[];
   shake=0;dangerDist=99;Object.assign(P,{wall:null,wallCharge:1.5,vy:0,onGround:true,face:Math.PI,hp:CH.hp||5,maxHp:CH.hp||5,inv:1.5,weapon:CH.gun||'knife',ammo:CH.gun?20:0,fireCd:0,spin:0,slide:0,slideCd:0,mantle:null,zip:null,swing:0,kbx:0,kbz:0,aimT:0});
   P.pos.set(0,0,0);
-  gameTime=0;kills=0;killPts=0;spawnT=2;announced={};nextStrong=20;resetHeli();resetTraps();
+  gameTime=0;kills=0;killPts=0;spawnT=2;announced={};nextStrong=15;resetHeli();resetTraps();
   for(let i=0;i<10;i++)spawnChest();
   for(let i=0;i<6;i++)spawnZombie('normal');
   setGunModel();updateHearts();updateWeaponHud();
