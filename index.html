@@ -717,7 +717,7 @@ function winGame(){
 // ================= cartoon traps (pre-placed around the map: lure zombies into them!) =================
 const TRAPS={banana:{icon:'🍌',name:'Banana peel'},anvil:{icon:'🔨',name:'Anvil'},spring:{icon:'🌀',name:'Spring trap'}};
 const traps=[];let trapTimers=[];
-const TRAP_COUNT=14;
+const TRAP_COUNT=30;
 function randTrap(){const r=Math.random();return r<.42?'banana':r<.72?'anvil':'spring'}
 const starGeo=new THREE.OctahedronGeometry(.13,0),starM=new THREE.MeshBasicMaterial({color:0xffe14d});
 const anvilM=lam(0x3a3d44),peelM=lam(0xf2d43a),springM=lam(0x9aa3ad),plateM=lam(0xb07a45),boxM=lam(0xd23a32),markM=new THREE.MeshBasicMaterial({color:0xff3b3b,transparent:true,opacity:.8,side:THREE.DoubleSide});
@@ -741,13 +741,13 @@ function createTrap(type,x,y,z){
   scene.add(g);traps.push(tr);return tr;
 }
 function spawnWorldTrap(){
-  for(let tries=0;tries<40;tries++){
+  for(let tries=0;tries<60;tries++){
     let x,z,y=0;
     if(Math.random()<.2){const b=buildings[Math.floor(Math.random()*buildings.length)];x=rand(b.x0+1.2,b.x1-1.2);z=rand(b.z0+1.2,b.z1-1.2);y=b.h}
     else{x=rand(-46,46);z=rand(-46,46)}
     if(y===0&&boxes.some(bx=>x>bx.x0-1.2&&x<bx.x1+1.2&&z>bx.z0-1.2&&z<bx.z1+1.2))continue;
     if(y===0&&ramps.some(r=>x>r.x0-1&&x<r.x1+1&&z>r.z0-1&&z<r.z1+1))continue;
-    if(traps.some(t=>Math.hypot(t.x-x,t.z-z)<6))continue;
+    if(traps.some(t=>Math.hypot(t.x-x,t.z-z)<3.5))continue;
     if(chests.some(c=>Math.hypot(c.spot.x-x,c.spot.z-z)<2.5))continue;
     if(state==='play'&&Math.hypot(P.pos.x-x,P.pos.z-z)<6)continue;
     y=surfaceAt(x,z,y+.5);
@@ -776,7 +776,7 @@ function updateTraps(dt){
         let hit=0;for(const z of [...zombies]){const dx=z.pos.x-tr.x,dz=z.pos.z-tr.z;if(dx*dx+dz*dz<1.8*1.8&&Math.abs(z.pos.y-tr.y)<1.5){hit++;damageZombie(z,4,null);if(zombies.includes(z))stunZombie(z,'squash',3*stunMul)}}
         popup(hit>1?`CLANG! x${hit} 🔨`:'CLANG! 🔨',new THREE.Vector3(tr.x,tr.y+2.5,tr.z),'#ff8a3c');
         tr.g.visible=false}}
-    if(tr.dead!==undefined){tr.dead-=dt;if(tr.dead<=0){scene.remove(tr.g);if(tr.anvil)scene.remove(tr.anvil);traps.splice(i,1);trapTimers.push(rand(5,9))}}
+    if(tr.dead!==undefined){tr.dead-=dt;if(tr.dead<=0){scene.remove(tr.g);if(tr.anvil)scene.remove(tr.anvil);traps.splice(i,1);trapTimers.push(rand(2,4))}}
   }
   for(let i=trapTimers.length-1;i>=0;i--){trapTimers[i]-=dt;if(trapTimers[i]<=0){trapTimers.splice(i,1);spawnWorldTrap()}}
 }
